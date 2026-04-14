@@ -1,0 +1,96 @@
+{
+  "app": {
+    "name": "Mimica",
+    "description": "Jogo de mimica para grupos"
+  },
+  "home": {
+    "newGame": "Novo Jogo",
+    "continueGame": "Continuar Jogo",
+    "teams": "Times",
+    "ranking": "Ranking"
+  },
+  "teams": {
+    "title": "Times",
+    "addTeam": "Adicionar Time",
+    "editTeam": "Editar Time",
+    "teamName": "Nome do time",
+    "teamNamePlaceholder": "Ex: Leoes",
+    "color": "Cor",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "deleteConfirm": "Tem certeza que deseja excluir este time?",
+    "noTeams": "Nenhum time cadastrado",
+    "minTeams": "Cadastre pelo menos 2 times para jogar"
+  },
+  "categories": {
+    "animals": "Animais",
+    "professions": "Profissoes",
+    "bible": "Biblia",
+    "movies": "Filmes/Series",
+    "actions": "Acoes",
+    "characters": "Personagens"
+  },
+  "setup": {
+    "title": "Configurar Jogo",
+    "selectTeams": "Selecione os Times",
+    "selectCategories": "Categorias",
+    "difficulty": "Dificuldade",
+    "timer": "Cronometro",
+    "easy": "Facil",
+    "medium": "Medio",
+    "hard": "Dificil",
+    "countdown": "Cronometro",
+    "unlimited": "Ilimitado",
+    "seconds": "{seconds}s",
+    "startGame": "Iniciar Jogo",
+    "minTeams": "Selecione pelo menos 2 times",
+    "minCategories": "Selecione pelo menos 1 categoria",
+    "confirmNewGame": "Iniciar novo jogo vai encerrar o jogo atual. Continuar?"
+  },
+  "turn": {
+    "teamTurn": "Vez do time",
+    "passDevice": "Passe o celular para o mimico",
+    "start": "Comecar",
+    "editCategories": "Editar Categorias"
+  },
+  "play": {
+    "round": "Rodada {round}",
+    "timeUp": "Tempo!",
+    "skip": "Pular",
+    "wrong": "Errou",
+    "correct": "Acertou",
+    "hideWord": "Esconder palavra",
+    "showWord": "Mostrar palavra"
+  },
+  "result": {
+    "correct": "Acertou!",
+    "wrong": "Errou!",
+    "skipped": "Pulou",
+    "next": "Proximo: Time {team}",
+    "score": "Placar"
+  },
+  "ranking": {
+    "title": "Ranking",
+    "position": "Pos",
+    "team": "Time",
+    "correct": "Acertos",
+    "wrong": "Erros",
+    "skipped": "Puladas",
+    "accuracy": "Taxa",
+    "points": "Pontos",
+    "endGame": "Encerrar Jogo",
+    "endGameConfirm": "Tem certeza? O placar sera apagado.",
+    "noGame": "Nenhum jogo ativo"
+  },
+  "common": {
+    "back": "Voltar",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "yes": "Sim",
+    "no": "Nao"
+  },
+  "toast": {
+    "wordsReset": "Todas as palavras foram usadas! Reiniciando o baralho."
+  }
+}

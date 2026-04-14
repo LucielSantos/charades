@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep:*)",
+      "Bash(bash:*)",
+      "Bash(rtk git:*)",
+      "Bash(rtk git commit -m ':*)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --app --src-dir --no-eslint --import-alias \"@/*\" --turbopack --yes)",
+      "Bash(mkdir -p /tmp/charades-backup)",
+      "Bash(mv .superpowers prompt.md /tmp/charades-backup/)",
+      "Bash(rtk pnpm:*)",
+      "Bash(pnpm import:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm add:*)",
+      "Bash(npx shadcn@latest init -d)"
+    ]
+  },
+  "enabledPlugins": {
+    "ui-ux-pro-max@ui-ux-pro-max-skill": true,
+    "context-mode@context-mode": true
+  }
+}

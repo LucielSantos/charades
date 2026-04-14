@@ -1,0 +1,72 @@
+<h2>Feedback ao validar uma palavra</h2>
+<p class="subtitle">Como o jogador vê o resultado de acerto, erro ou pular?</p>
+
+<div class="cards">
+  <!-- Option A: Flash rápido -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 0; overflow: hidden; border-radius: 12px 12px 0 0;">
+      <!-- Simulating 3 states side by side -->
+      <div style="display: flex; height: 220px;">
+        <!-- Acerto -->
+        <div style="flex: 1; background: linear-gradient(135deg, #22c55e, #16a34a); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; border-right: 2px solid rgba(255,255,255,0.2);">
+          <div style="font-size: 48px; margin-bottom: 8px;">&#10003;</div>
+          <div style="font-size: 14px; font-weight: 700; letter-spacing: 1px;">ACERTOU!</div>
+          <div style="font-size: 18px; font-weight: 600; margin-top: 4px; opacity: 0.9;">Elefante</div>
+        </div>
+        <!-- Erro -->
+        <div style="flex: 1; background: linear-gradient(135deg, #ef4444, #dc2626); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; border-right: 2px solid rgba(255,255,255,0.2);">
+          <div style="font-size: 48px; margin-bottom: 8px;">&#10007;</div>
+          <div style="font-size: 14px; font-weight: 700; letter-spacing: 1px;">ERROU!</div>
+          <div style="font-size: 18px; font-weight: 600; margin-top: 4px; opacity: 0.9;">Elefante</div>
+        </div>
+        <!-- Pular -->
+        <div style="flex: 1; background: linear-gradient(135deg, #eab308, #ca8a04); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;">
+          <div style="font-size: 48px; margin-bottom: 8px;">&#8594;</div>
+          <div style="font-size: 14px; font-weight: 700; letter-spacing: 1px;">PULOU</div>
+          <div style="font-size: 18px; font-weight: 600; margin-top: 4px; opacity: 0.9;">Elefante</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A) Flash Rapido</h3>
+      <p>Tela inteira muda de cor por ~1 segundo com icone grande e resultado. Proximo time/palavra carrega automaticamente. Ritmo rapido, energia alta.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Toast -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 24px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 12px 12px 0 0;">
+      <div style="background: white; border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: relative;">
+        <!-- Toast notification -->
+        <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #22c55e; color: white; padding: 6px 20px; border-radius: 20px; font-size: 13px; font-weight: 700; box-shadow: 0 2px 8px rgba(34,197,94,0.4); white-space: nowrap;">&#10003; Acertou! +1 ponto</div>
+        <div style="font-size: 14px; color: #6366f1; font-weight: 600; letter-spacing: 1px; margin-bottom: 8px; margin-top: 12px;">VEZ DO TIME AZUL</div>
+        <div style="font-size: 32px; font-weight: 800; color: #1e1b4b; margin-bottom: 12px;">Bombeiro</div>
+        <div style="display: flex; gap: 8px; justify-content: center;">
+          <span style="background: #e0e7ff; color: #4338ca; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">Profissoes</span>
+          <span style="background: #fef3c7; color: #d97706; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">Medio</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B) Toast / Notificacao</h3>
+      <p>Pequeno banner no topo mostra o resultado enquanto a proxima palavra ja aparece embaixo. Transicao suave, fluxo continuo sem interromper o ritmo.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Tela de transição -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 24px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 12px 12px 0 0;">
+      <div style="background: white; border-radius: 16px; padding: 24px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+        <div style="width: 64px; height: 64px; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 32px; color: #22c55e;">&#10003;</div>
+        <div style="font-size: 13px; color: #94a3b8; font-weight: 600; letter-spacing: 1px; margin-bottom: 4px;">TIME VERMELHO ACERTOU!</div>
+        <div style="font-size: 28px; font-weight: 800; color: #1e1b4b; margin-bottom: 16px;">Elefante</div>
+        <div style="font-size: 14px; color: #64748b; margin-bottom: 16px;">Placar: Vermelho 3 x 2 Azul</div>
+        <div style="background: #6366f1; color: white; padding: 12px 32px; border-radius: 12px; font-weight: 700; font-size: 15px; display: inline-block;">Proximo: Time Azul &rarr;</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C) Tela de Transicao</h3>
+      <p>Tela intermediaria mostra resultado, palavra, placar atualizado e botao para avancar. Ritmo mais pausado, bom para grupos que querem celebrar/reagir.</p>
+    </div>
+  </div>
+</div>

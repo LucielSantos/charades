@@ -9,46 +9,46 @@ export type PlayResult = "correct" | "wrong" | "skipped"
 export type GameStatus = "idle" | "setup" | "playing" | "paused"
 
 export interface Team {
-  id: string
-  name: string
-  color: string
+	id: string
+	name: string
+	color: string
 }
 
 export interface Word {
-  id: string
-  text: string
-  category: CategoryId
-  difficulty: Difficulty
+	id: string
+	text: string
+	category: CategoryId
+	difficulty: Difficulty
 }
 
 export interface Category {
-  id: CategoryId
-  labelKey: string
-  icon: string
+	id: CategoryId
+	labelKey: string
+	icon: string
 }
 
 export interface GameSettings {
-  selectedTeamIds: string[]
-  selectedCategories: CategoryId[]
-  difficulty: Difficulty
-  timerMode: TimerMode
-  timerSeconds: number
+	selectedTeamIds: string[]
+	selectedCategories: CategoryId[]
+	difficulty: Difficulty
+	timerMode: TimerMode
+	timerSeconds: number
 }
 
 export interface TeamStats {
-  correct: number
-  wrong: number
-  skipped: number
+	correct: number
+	wrong: number
+	skipped: number
 }
 
 export interface GameState {
-  status: GameStatus
-  settings: GameSettings
-  currentTeamIndex: number
-  currentWord: Word | null
-  usedWordIds: string[]
-  teamStats: Record<string, TeamStats>
-  lastResult: PlayResult | null
-  lastWord: Word | null
-  poolWasReset: boolean
+	status: GameStatus
+	settings: GameSettings
+	currentTeamIndex: number
+	currentWord: Word | null
+	usedWordIds: string[]
+	teamStats: Record<string, TeamStats>
+	lastResult: PlayResult | null
+	lastWord: Word | null
+	poolWasReset: boolean
 }

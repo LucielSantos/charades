@@ -5,6 +5,7 @@ import { TimerDisplay } from "@/components/game/timer-display"
 import { WordDisplay } from "@/components/game/word-display"
 import type { PlayResult } from "@/data/types"
 import { useTimer } from "@/hooks/use-timer"
+import { usePressure } from "@/hooks/use-pressure"
 import { useGameStore } from "@/stores/game-store"
 import { useTeamStore } from "@/stores/team-store"
 import { Volume2, VolumeX } from "lucide-react"
@@ -31,6 +32,12 @@ export default function GamePlayPage() {
   const timer = useTimer({
     mode: settings.timerMode,
     seconds: settings.timerSeconds,
+  })
+
+  usePressure({
+    pressurePhase: timer.pressurePhase,
+    isRunning: timer.isRunning,
+    muted,
   })
 
   useEffect(() => {

@@ -56,9 +56,9 @@ export function PlayMenuSheet({
 					</SheetHeader>
 
 					<section className="py-2">
-						<h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+						<h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
 							{t("configure")}
-						</h2>
+						</h3>
 
 						<div className="mb-4">
 							<p className="text-xs font-semibold text-gray-500 mb-2">{t("categories")}</p>
@@ -131,9 +131,9 @@ export function PlayMenuSheet({
 					<Separator className="my-4" />
 
 					<section className="pb-2">
-						<h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+						<h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
 							{t("exit")}
-						</h2>
+						</h3>
 						<div className="flex flex-col gap-2">
 							<Button variant="outline" className="w-full h-12" onClick={onExitHome}>
 								<Home className="mr-2 h-4 w-4" />

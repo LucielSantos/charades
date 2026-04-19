@@ -42,7 +42,12 @@
       "Bash(rtk grep *)",
       "Bash(yarn test *)",
       "Bash(yarn lint *)",
-      "Bash(yarn build *)"
+      "Bash(yarn build *)",
+      "Bash(rtk vitest *)",
+      "Bash(git checkout *)",
+      "mcp__plugin_context-mode_context-mode__ctx_search",
+      "Bash(node *)",
+      "mcp__plugin_context-mode_context-mode__ctx_execute_file"
     ]
   },
   "enabledPlugins": {

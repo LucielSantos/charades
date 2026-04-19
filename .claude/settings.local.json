@@ -12,7 +12,23 @@
       "Bash(pnpm import:*)",
       "Bash(pnpm install:*)",
       "Bash(pnpm add:*)",
-      "Bash(npx shadcn@latest init -d)"
+      "Bash(npx shadcn@latest init -d)",
+      "Bash(npx shadcn@latest add button card dialog sheet badge toggle separator sonner --yes)",
+      "Bash(pnpm build:*)",
+      "Bash(rtk npx:*)",
+      "mcp__plugin_context-mode_context-mode__ctx_batch_execute",
+      "mcp__plugin_context-mode_context-mode__ctx_execute",
+      "Bash(ffmpeg -f lavfi -i \"sine=frequency=800:duration=0.1\" -ar 44100 -ac 1 \"C:/Users/Datamob/projects/personal/charades/public/sounds/tick.mp3\")",
+      "Bash(ffmpeg -f lavfi -i \"sine=frequency=1200:duration=0.2\" -ar 44100 -ac 1 \"C:/Users/Datamob/projects/personal/charades/public/sounds/beep.mp3\")",
+      "Bash(npx @biomejs/biome check .)",
+      "Bash(npx @biomejs/biome check src/)",
+      "Bash(npx @biomejs/biome check src/ --max-diagnostics=200)",
+      "Bash(grep -v \"^$\")",
+      "Bash(npx @biomejs/biome check src/ --write --unsafe)",
+      "Bash(npx @biomejs/biome check src/ --max-diagnostics=50)",
+      "Bash(grep -E \"^src/|^src\\\\\\\\\\\\\\\\|lint/|format/\")",
+      "Bash(pnpm dev:*)",
+      "mcp__plugin_context-mode_context-mode__ctx_stats"
     ]
   },
   "enabledPlugins": {

@@ -153,4 +153,54 @@ describe("useGameStore", () => {
 			expect(useGameStore.getState().getRoundNumber()).toBe(2)
 		})
 	})
+
+	describe("regenerateWord", () => {
+		it("replaces current word with a different word", () => {
+			useGameStore.getState().startGame(defaultSettings)
+			useGameStore.getState().drawWord()
+			const firstWord = useGameStore.getState().currentWord!
+			useGameStore.getState().regenerateWord()
+			const newWord = useGameStore.getState().currentWord!
+			expect(newWord).not.toBeNull()
+			expect(newWord.id).not.toBe(firstWord.id)
+		})
+
+		it("increments skipped counter for current team", () => {
+			useGameStore.getState().startGame(defaultSettings)
+			useGameStore.getState().drawWord()
+			useGameStore.getState().regenerateWord()
+			const stats = useGameStore.getState().teamStats["team-1"]
+			expect(stats.skipped).toBe(1)
+		})
+
+		it("does not advance to next team", () => {
+			useGameStore.getState().startGame(defaultSettings)
+			useGameStore.getState().drawWord()
+			useGameStore.getState().regenerateWord()
+			expect(useGameStore.getState().currentTeamIndex).toBe(0)
+		})
+
+		it("returns discarded word to the pool (available for future draws)", () => {
+			useGameStore.getState().startGame(defaultSettings)
+			useGameStore.getState().drawWord()
+			const discarded = useGameStore.getState().currentWord!
+			useGameStore.getState().regenerateWord()
+			expect(useGameStore.getState().usedWordIds).not.toContain(discarded.id)
+		})
+
+		it("keeps new word in usedWordIds so it is not redrawn again", () => {
+			useGameStore.getState().startGame(defaultSettings)
+			useGameStore.getState().drawWord()
+			useGameStore.getState().regenerateWord()
+			const newWordId = useGameStore.getState().currentWord!.id
+			expect(useGameStore.getState().usedWordIds).toContain(newWordId)
+		})
+
+		it("always leaves a non-null currentWord after regenerate", () => {
+			useGameStore.getState().startGame(defaultSettings)
+			useGameStore.getState().drawWord()
+			useGameStore.getState().regenerateWord()
+			expect(useGameStore.getState().currentWord).not.toBeNull()
+		})
+	})
 })

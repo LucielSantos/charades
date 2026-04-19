@@ -5,30 +5,63 @@ import { useCallback, useEffect, useRef } from "react"
 interface UseAudioReturn {
 	playTick: () => void
 	playBeep: () => void
+	unlock: () => void
 }
 
+type AudioContextCtor = typeof AudioContext
+
 export function useAudio(muted: boolean): UseAudioReturn {
-	const tickRef = useRef<HTMLAudioElement | null>(null)
-	const beepRef = useRef<HTMLAudioElement | null>(null)
+	const ctxRef = useRef<AudioContext | null>(null)
 
 	useEffect(() => {
-		tickRef.current = new Audio("/sounds/tick.mp3")
-		beepRef.current = new Audio("/sounds/beep.mp3")
-		tickRef.current.preload = "auto"
-		beepRef.current.preload = "auto"
+		return () => {
+			ctxRef.current?.close()
+			ctxRef.current = null
+		}
 	}, [])
 
-	const playTick = useCallback(() => {
-		if (muted || !tickRef.current) return
-		tickRef.current.currentTime = 0
-		tickRef.current.play().catch(() => {})
-	}, [muted])
+	const unlock = useCallback(() => {
+		if (ctxRef.current) {
+			if (ctxRef.current.state === "suspended") ctxRef.current.resume()
+			return
+		}
+		const Ctor: AudioContextCtor | undefined =
+			window.AudioContext ??
+			(window as unknown as { webkitAudioContext?: AudioContextCtor }).webkitAudioContext
+		if (!Ctor) return
+		ctxRef.current = new Ctor()
+	}, [])
 
-	const playBeep = useCallback(() => {
-		if (muted || !beepRef.current) return
-		beepRef.current.currentTime = 0
-		beepRef.current.play().catch(() => {})
-	}, [muted])
+	const playTone = useCallback(
+		(frequency: number, durationMs: number, peakGain: number) => {
+			if (muted) return
+			const ctx = ctxRef.current
+			if (!ctx) return
+			if (ctx.state === "suspended") ctx.resume()
 
-	return { playTick, playBeep }
+			const now = ctx.currentTime
+			const dur = durationMs / 1000
+			const osc = ctx.createOscillator()
+			const gain = ctx.createGain()
+
+			osc.type = "sine"
+			osc.frequency.value = frequency
+
+			gain.gain.setValueAtTime(0, now)
+			gain.gain.linearRampToValueAtTime(peakGain, now + 0.005)
+			gain.gain.exponentialRampToValueAtTime(0.0001, now + dur)
+
+			osc.connect(gain)
+			gain.connect(ctx.destination)
+
+			osc.start(now)
+			osc.stop(now + dur)
+		},
+		[muted],
+	)
+
+	const playTick = useCallback(() => playTone(1200, 60, 0.25), [playTone])
+	const playBeep = useCallback(() => playTone(880, 180, 0.4), [playTone])
+
+	return { playTick, playBeep, unlock }
 }

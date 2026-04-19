@@ -48,8 +48,9 @@ export default function GamePlayPage() {
 		seconds: settings.timerSeconds,
 	})
 
-	usePressure({
+	const { unlockAudio } = usePressure({
 		pressurePhase: timer.pressurePhase,
+		timeLeft: timer.timeLeft,
 		isRunning: timer.isRunning,
 		muted,
 	})
@@ -70,6 +71,7 @@ export default function GamePlayPage() {
 	}, [menuOpen])
 
 	function handleStart() {
+		unlockAudio()
 		setHasStarted(true)
 		timer.start()
 	}

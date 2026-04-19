@@ -1,30 +1,32 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import { useAudio } from "./use-audio"
 import type { PressurePhase } from "./use-timer"
 import { useVibration } from "./use-vibration"
 
 interface UsePressureOptions {
 	pressurePhase: PressurePhase
+	timeLeft: number
 	isRunning: boolean
 	muted: boolean
 }
 
-export function usePressure({ pressurePhase, isRunning, muted }: UsePressureOptions) {
-	const { playTick, playBeep } = useAudio(muted)
+interface UsePressureReturn {
+	unlockAudio: () => void
+}
+
+export function usePressure({
+	pressurePhase,
+	timeLeft,
+	isRunning,
+	muted,
+}: UsePressureOptions): UsePressureReturn {
+	const { playTick, playBeep, unlock } = useAudio(muted)
 	const { vibrate } = useVibration()
-	const prevPhaseRef = useRef<PressurePhase>("none")
 
 	useEffect(() => {
-		if (!isRunning || pressurePhase === "none") {
-			prevPhaseRef.current = pressurePhase
-			return
-		}
-
-		if (pressurePhase !== prevPhaseRef.current) {
-			prevPhaseRef.current = pressurePhase
-		}
+		if (!isRunning || pressurePhase === "none") return
 
 		if (pressurePhase === "high") {
 			playBeep()
@@ -33,5 +35,7 @@ export function usePressure({ pressurePhase, isRunning, muted }: UsePressureOpti
 		}
 
 		vibrate(pressurePhase)
-	}, [pressurePhase, isRunning, playTick, playBeep, vibrate])
+	}, [timeLeft, pressurePhase, isRunning, playTick, playBeep, vibrate])
+
+	return { unlockAudio: unlock }
 }

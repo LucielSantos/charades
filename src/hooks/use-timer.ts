@@ -39,7 +39,20 @@ export function useTimer({ mode, seconds }: UseTimerOptions): UseTimerReturn {
 	const [elapsed, setElapsed] = useState(0)
 	const [isRunning, setIsRunning] = useState(false)
 	const [isExpired, setIsExpired] = useState(false)
+	const [hasStarted, setHasStarted] = useState(false)
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+	const latestSecondsRef = useRef(seconds)
+	const latestModeRef = useRef(mode)
+	useEffect(() => {
+		latestSecondsRef.current = seconds
+	}, [seconds])
+	useEffect(() => {
+		latestModeRef.current = mode
+	}, [mode])
+
+	const activeModeRef = useRef<TimerMode>(mode)
+	const [activeMode, setActiveMode] = useState<TimerMode>(mode)
 
 	const clearTimer = useCallback(() => {
 		if (intervalRef.current) {
@@ -50,6 +63,9 @@ export function useTimer({ mode, seconds }: UseTimerOptions): UseTimerReturn {
 
 	const start = useCallback(() => {
 		if (isExpired) return
+		activeModeRef.current = latestModeRef.current
+		setActiveMode(latestModeRef.current)
+		setHasStarted(true)
 		setIsRunning(true)
 	}, [isExpired])
 
@@ -60,11 +76,16 @@ export function useTimer({ mode, seconds }: UseTimerOptions): UseTimerReturn {
 
 	const reset = useCallback(() => {
 		clearTimer()
-		setTimeLeft(seconds)
+		const freshSeconds = latestSecondsRef.current
+		const freshMode = latestModeRef.current
+		activeModeRef.current = freshMode
+		setActiveMode(freshMode)
+		setTimeLeft(freshSeconds)
 		setElapsed(0)
 		setIsRunning(false)
 		setIsExpired(false)
-	}, [seconds, clearTimer])
+		setHasStarted(false)
+	}, [clearTimer])
 
 	useEffect(() => {
 		if (!isRunning) {
@@ -73,7 +94,7 @@ export function useTimer({ mode, seconds }: UseTimerOptions): UseTimerReturn {
 		}
 
 		intervalRef.current = setInterval(() => {
-			if (mode === "countdown") {
+			if (activeModeRef.current === "countdown") {
 				setTimeLeft((prev) => {
 					if (prev <= 1) {
 						setIsRunning(false)
@@ -88,11 +109,17 @@ export function useTimer({ mode, seconds }: UseTimerOptions): UseTimerReturn {
 		}, 1000)
 
 		return clearTimer
-	}, [isRunning, mode, clearTimer])
+	}, [isRunning, clearTimer])
 
-	const displaySeconds = mode === "countdown" ? timeLeft : elapsed
+	useEffect(() => {
+		if (!hasStarted) {
+			setTimeLeft(seconds)
+		}
+	}, [seconds, hasStarted])
+
+	const displaySeconds = activeMode === "countdown" ? timeLeft : elapsed
 	const displayTime = formatTime(displaySeconds)
-	const pressurePhase = getPressurePhase(timeLeft, mode)
+	const pressurePhase = getPressurePhase(timeLeft, activeMode)
 
 	return {
 		timeLeft,

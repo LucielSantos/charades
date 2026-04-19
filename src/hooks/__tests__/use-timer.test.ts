@@ -1,5 +1,6 @@
 import { act, renderHook } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import type { TimerMode } from "@/data/types"
 import { useTimer } from "../use-timer"
 
 describe("useTimer", () => {
@@ -89,6 +90,56 @@ describe("useTimer", () => {
 			act(() => vi.advanceTimersByTime(5000))
 			expect(result.current.elapsed).toBe(5)
 			expect(result.current.pressurePhase).toBe("none")
+		})
+	})
+
+	describe("locked config per run", () => {
+		it("does not reset timeLeft when seconds prop changes mid-run", () => {
+			const { result, rerender } = renderHook(
+				({ seconds }) => useTimer({ mode: "countdown", seconds }),
+				{ initialProps: { seconds: 60 } },
+			)
+			act(() => result.current.start())
+			act(() => vi.advanceTimersByTime(3000))
+			expect(result.current.timeLeft).toBe(57)
+
+			rerender({ seconds: 30 })
+			expect(result.current.timeLeft).toBe(57)
+
+			act(() => vi.advanceTimersByTime(1000))
+			expect(result.current.timeLeft).toBe(56)
+		})
+
+		it("uses the latest seconds prop on next reset+start", () => {
+			const { result, rerender } = renderHook(
+				({ seconds }) => useTimer({ mode: "countdown", seconds }),
+				{ initialProps: { seconds: 60 } },
+			)
+			act(() => result.current.start())
+			act(() => vi.advanceTimersByTime(5000))
+
+			rerender({ seconds: 30 })
+			act(() => result.current.reset())
+			expect(result.current.timeLeft).toBe(30)
+
+			act(() => result.current.start())
+			act(() => vi.advanceTimersByTime(1000))
+			expect(result.current.timeLeft).toBe(29)
+		})
+
+		it("locks mode at start — switching prop mid-run does not change interval behavior", () => {
+			const { result, rerender } = renderHook(
+				({ mode }: { mode: TimerMode }) => useTimer({ mode, seconds: 60 }),
+				{ initialProps: { mode: "countdown" } },
+			)
+			act(() => result.current.start())
+			act(() => vi.advanceTimersByTime(2000))
+			expect(result.current.timeLeft).toBe(58)
+
+			rerender({ mode: "unlimited" })
+			act(() => vi.advanceTimersByTime(3000))
+			// Still counting down, not switched to elapsed.
+			expect(result.current.timeLeft).toBe(55)
 		})
 	})
 

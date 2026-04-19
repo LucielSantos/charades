@@ -8,33 +8,43 @@ import type { PlayResult } from "@/data/types"
 interface ActionButtonsProps {
 	onAction: (result: PlayResult) => void
 	onRegenerate: () => void
+	disabled?: boolean
+	regenerateDisabled?: boolean
 }
 
-export function ActionButtons({ onAction, onRegenerate }: ActionButtonsProps) {
+export function ActionButtons({
+	onAction,
+	onRegenerate,
+	disabled = false,
+	regenerateDisabled = false,
+}: ActionButtonsProps) {
 	const t = useTranslations("play")
 
 	return (
 		<div className="flex gap-3">
 			<Button
 				size="lg"
-				className="flex-1 h-14 bg-yellow-500 hover:bg-yellow-600 text-white font-bold"
+				className="flex-1 h-14 bg-yellow-500 hover:bg-yellow-600 text-white font-bold disabled:opacity-50"
 				onClick={onRegenerate}
+				disabled={regenerateDisabled}
 			>
 				<RotateCw className="mr-1 h-5 w-5" />
 				{t("regenerate")}
 			</Button>
 			<Button
 				size="lg"
-				className="flex-1 h-14 bg-red-500 hover:bg-red-600 text-white font-bold"
+				className="flex-1 h-14 bg-red-500 hover:bg-red-600 text-white font-bold disabled:opacity-50"
 				onClick={() => onAction("wrong")}
+				disabled={disabled}
 			>
 				<X className="mr-1 h-5 w-5" />
 				{t("wrong")}
 			</Button>
 			<Button
 				size="lg"
-				className="flex-1 h-14 bg-green-500 hover:bg-green-600 text-white font-bold"
+				className="flex-1 h-14 bg-green-500 hover:bg-green-600 text-white font-bold disabled:opacity-50"
 				onClick={() => onAction("correct")}
+				disabled={disabled}
 			>
 				<Check className="mr-1 h-5 w-5" />
 				{t("correct")}

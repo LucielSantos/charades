@@ -61,7 +61,8 @@
 		"wrong": "Errou",
 		"correct": "Acertou",
 		"hideWord": "Esconder palavra",
-		"showWord": "Mostrar palavra"
+		"showWord": "Mostrar palavra",
+		"start": "Iniciar"
 	},
 	"result": {
 		"correct": "Acertou!",

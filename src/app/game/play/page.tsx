@@ -1,6 +1,6 @@
 "use client"
 
-import { Volume2, VolumeX } from "lucide-react"
+import { Play, Volume2, VolumeX } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
@@ -8,6 +8,7 @@ import { toast } from "sonner"
 import { ActionButtons } from "@/components/game/action-buttons"
 import { TimerDisplay } from "@/components/game/timer-display"
 import { WordDisplay } from "@/components/game/word-display"
+import { Button } from "@/components/ui/button"
 import type { PlayResult } from "@/data/types"
 import { usePressure } from "@/hooks/use-pressure"
 import { useTimer } from "@/hooks/use-timer"
@@ -31,6 +32,7 @@ export default function GamePlayPage() {
 
 	const [muted, setMuted] = useState(false)
 	const [hydrated, setHydrated] = useState(false)
+	const [hasStarted, setHasStarted] = useState(false)
 
 	useEffect(() => setHydrated(true), [])
 
@@ -49,9 +51,13 @@ export default function GamePlayPage() {
 	})
 
 	useEffect(() => {
-		timer.start()
 		return () => timer.pause()
-	}, [timer.start, timer.pause])
+	}, [timer.pause])
+
+	function handleStart() {
+		setHasStarted(true)
+		timer.start()
+	}
 
 	useEffect(() => {
 		if (poolWasReset) {
@@ -106,11 +112,22 @@ export default function GamePlayPage() {
 
 			{/* Timer */}
 			<div className="mb-8 relative z-20">
-				<TimerDisplay
-					displayTime={timer.displayTime}
-					pressurePhase={timer.pressurePhase}
-					isExpired={timer.isExpired}
-				/>
+				{hasStarted ? (
+					<TimerDisplay
+						displayTime={timer.displayTime}
+						pressurePhase={timer.pressurePhase}
+						isExpired={timer.isExpired}
+					/>
+				) : (
+					<Button
+						size="lg"
+						className="w-full h-14 bg-blue-500 hover:bg-blue-600 text-white font-bold"
+						onClick={handleStart}
+					>
+						<Play className="mr-2 h-5 w-5" />
+						{t("start")}
+					</Button>
+				)}
 			</div>
 
 			{/* Word */}
@@ -124,7 +141,12 @@ export default function GamePlayPage() {
 
 			{/* Actions */}
 			<div className="relative z-20 pb-4">
-				<ActionButtons onAction={handleAction} onRegenerate={handleRegenerate} />
+				<ActionButtons
+					onAction={handleAction}
+					onRegenerate={handleRegenerate}
+					disabled={!hasStarted}
+					regenerateDisabled={hasStarted}
+				/>
 			</div>
 		</div>
 	)

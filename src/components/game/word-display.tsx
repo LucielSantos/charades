@@ -20,7 +20,7 @@ const difficultyColors: Record<Difficulty, string> = {
 
 export function WordDisplay({ word, category, difficulty }: WordDisplayProps) {
 	const t = useTranslations()
-	const [hidden, setHidden] = useState(false)
+	const [hidden, setHidden] = useState(true)
 
 	return (
 		<div className="text-center space-y-4">

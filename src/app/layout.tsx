@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
+import DesktopStage from "@/components/layout/desktop-stage"
 import { Toaster } from "@/components/ui/sonner"
 import "./globals.css"
 
@@ -41,9 +42,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
 	return (
 		<html lang={locale} className={`${geist.variable} ${geistMono.variable}`}>
-			<body className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-violet-100 antialiased">
+			<body className="min-h-screen bg-background antialiased">
 				<NextIntlClientProvider messages={messages}>
-					<main className="mx-auto max-w-[430px] min-h-screen">{children}</main>
+					<DesktopStage>
+						<main className="mx-auto max-w-[430px] min-h-screen md:rounded-3xl md:shadow-2xl md:my-8 md:min-h-[calc(100vh-4rem)] md:bg-white/80 md:backdrop-blur-sm md:border md:border-white/40 md:overflow-hidden dark:md:bg-zinc-900/70 dark:md:border-zinc-800/60">
+							{children}
+						</main>
+					</DesktopStage>
 					<Toaster />
 				</NextIntlClientProvider>
 			</body>

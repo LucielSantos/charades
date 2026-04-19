@@ -239,7 +239,7 @@ export default function GameSetupPage() {
 			</section>
 
 			{/* Start Button */}
-			<div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white/80 to-transparent">
+			<div className="sticky bottom-0 p-4 bg-gradient-to-t from-white/80 to-transparent">
 				<div className="mx-auto max-w-[430px]">
 					<Button
 						size="lg"

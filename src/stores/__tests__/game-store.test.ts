@@ -93,11 +93,75 @@ describe("useGameStore", () => {
 		})
 	})
 
-	describe("updateCategories", () => {
+	describe("updateSettings", () => {
 		it("updates selected categories mid-game", () => {
 			useGameStore.getState().startGame(defaultSettings)
-			useGameStore.getState().updateCategories(["animals", "actions"])
+			useGameStore.getState().updateSettings({ selectedCategories: ["animals", "actions"] })
 			expect(useGameStore.getState().settings.selectedCategories).toEqual(["animals", "actions"])
+		})
+
+		it("updates difficulty mid-game", () => {
+			useGameStore.getState().startGame(defaultSettings)
+			useGameStore.getState().updateSettings({ difficulty: "medium" })
+			expect(useGameStore.getState().settings.difficulty).toBe("medium")
+		})
+
+		it("updates timerSeconds without touching currentWord", () => {
+			useGameStore.getState().startGame(defaultSettings)
+			useGameStore.getState().drawWord()
+			const wordBefore = useGameStore.getState().currentWord
+			useGameStore.getState().updateSettings({ timerSeconds: 30 })
+			expect(useGameStore.getState().settings.timerSeconds).toBe(30)
+			expect(useGameStore.getState().currentWord).toEqual(wordBefore)
+		})
+
+		it("updates timerMode without touching currentWord", () => {
+			useGameStore.getState().startGame(defaultSettings)
+			useGameStore.getState().drawWord()
+			const wordBefore = useGameStore.getState().currentWord
+			useGameStore.getState().updateSettings({ timerMode: "unlimited" })
+			expect(useGameStore.getState().settings.timerMode).toBe("unlimited")
+			expect(useGameStore.getState().currentWord).toEqual(wordBefore)
+		})
+
+		it("keeps current word when it still fits new filters", () => {
+			useGameStore.getState().startGame(defaultSettings)
+			useGameStore.getState().drawWord()
+			const before = useGameStore.getState().currentWord
+			useGameStore.getState().updateSettings({ selectedCategories: ["animals", "actions"] })
+			expect(useGameStore.getState().currentWord).toEqual(before)
+		})
+
+		it("re-draws word when category is removed, without incrementing skipped", () => {
+			useGameStore
+				.getState()
+				.startGame({ ...defaultSettings, selectedCategories: ["animals", "actions"] })
+			useGameStore.getState().drawWord()
+			const before = useGameStore.getState().currentWord!
+			const otherCategory = before.category === "animals" ? "actions" : "animals"
+			useGameStore.getState().updateSettings({ selectedCategories: [otherCategory] })
+			const after = useGameStore.getState().currentWord!
+			expect(after.id).not.toBe(before.id)
+			expect(after.category).toBe(otherCategory)
+			expect(useGameStore.getState().teamStats["team-1"].skipped).toBe(0)
+		})
+
+		it("re-draws word when difficulty changes, without incrementing skipped", () => {
+			useGameStore.getState().startGame(defaultSettings)
+			useGameStore.getState().drawWord()
+			const before = useGameStore.getState().currentWord!
+			useGameStore.getState().updateSettings({ difficulty: "medium" })
+			const after = useGameStore.getState().currentWord!
+			expect(after.id).not.toBe(before.id)
+			expect(after.difficulty).toBe("medium")
+			expect(useGameStore.getState().teamStats["team-1"].skipped).toBe(0)
+		})
+
+		it("ignores update that would empty selectedCategories", () => {
+			useGameStore.getState().startGame(defaultSettings)
+			const before = useGameStore.getState().settings.selectedCategories
+			useGameStore.getState().updateSettings({ selectedCategories: [] })
+			expect(useGameStore.getState().settings.selectedCategories).toEqual(before)
 		})
 	})
 

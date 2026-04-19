@@ -8,7 +8,7 @@ interface GameStore extends GameState {
 	drawWord: () => void
 	regenerateWord: () => void
 	submitResult: (result: PlayResult) => void
-	updateCategories: (categories: CategoryId[]) => void
+	updateSettings: (partial: Partial<GameSettings>) => void
 	resetGame: () => void
 	getCurrentTeamId: () => string
 	getNextTeamId: () => string
@@ -157,10 +157,76 @@ export const useGameStore = create<GameStore>()(
 				})
 			},
 
-			updateCategories: (categories) => {
-				set((state) => ({
-					settings: { ...state.settings, selectedCategories: categories },
-				}))
+			updateSettings: (partial) => {
+				const state = get()
+				const nextSettings: GameSettings = { ...state.settings, ...partial }
+
+				// Protege contra zero categorias
+				if (nextSettings.selectedCategories.length === 0) return
+
+				const categoriesChanged =
+					partial.selectedCategories !== undefined &&
+					(partial.selectedCategories.length !== state.settings.selectedCategories.length ||
+						partial.selectedCategories.some((c) => !state.settings.selectedCategories.includes(c)))
+				const difficultyChanged =
+					partial.difficulty !== undefined && partial.difficulty !== state.settings.difficulty
+
+				const word = state.currentWord
+				const wordStillFits =
+					!word ||
+					(nextSettings.selectedCategories.includes(word.category) &&
+						nextSettings.difficulty === word.difficulty)
+
+				if (!categoriesChanged && !difficultyChanged) {
+					set({ settings: nextSettings })
+					return
+				}
+
+				if (wordStillFits) {
+					set({ settings: nextSettings })
+					return
+				}
+
+				// Palavra atual não encaixa mais — sorteia uma nova, sem contar como skipped.
+				const usedWithoutCurrent = word
+					? state.usedWordIds.filter((id) => id !== word.id)
+					: state.usedWordIds
+
+				let available = getAvailableWords(
+					nextSettings.selectedCategories,
+					nextSettings.difficulty,
+					usedWithoutCurrent,
+				)
+				let resetPool = false
+
+				if (available.length === 0) {
+					available = getAvailableWords(
+						nextSettings.selectedCategories,
+						nextSettings.difficulty,
+						[],
+					)
+					resetPool = true
+				}
+
+				if (available.length === 0) {
+					// Nenhuma palavra possível nos novos filtros — aplica settings mesmo assim
+					// e limpa currentWord para forçar redirect.
+					set({
+						settings: nextSettings,
+						currentWord: null,
+					})
+					return
+				}
+
+				const newWord = pickRandomWord(available)
+				const nextUsed = resetPool ? [newWord.id] : [...usedWithoutCurrent, newWord.id]
+
+				set({
+					settings: nextSettings,
+					currentWord: newWord,
+					usedWordIds: nextUsed,
+					poolWasReset: resetPool,
+				})
 			},
 
 			resetGame: () => set(initialState),

@@ -17,7 +17,7 @@ export default function GameTurnPage() {
 
 	const getCurrentTeamId = useGameStore((s) => s.getCurrentTeamId)
 	const selectedCategories = useGameStore((s) => s.settings.selectedCategories)
-	const updateCategories = useGameStore((s) => s.updateCategories)
+	const updateSettings = useGameStore((s) => s.updateSettings)
 	const drawWord = useGameStore((s) => s.drawWord)
 	const getTeamById = useTeamStore((s) => s.getTeamById)
 
@@ -92,7 +92,10 @@ export default function GameTurnPage() {
 						<SheetTitle>{t("editCategories")}</SheetTitle>
 					</SheetHeader>
 					<div className="py-4">
-						<CategoryGrid selected={selectedCategories} onChange={updateCategories} />
+						<CategoryGrid
+							selected={selectedCategories}
+							onChange={(selectedCategories) => updateSettings({ selectedCategories })}
+						/>
 					</div>
 					<Button className="w-full mt-4" onClick={() => setSettingsOpen(false)}>
 						{tc("confirm")}

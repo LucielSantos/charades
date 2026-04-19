@@ -1,6 +1,6 @@
 "use client"
 
-import { Gamepad2, Trophy, Users } from "lucide-react"
+import { Gamepad2, Trophy } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
@@ -70,16 +70,6 @@ export default function HomePage() {
 						{t("home.newGame")}
 					</Button>
 				)}
-
-				<Button
-					size="lg"
-					variant="outline"
-					className="h-14 text-base font-semibold"
-					onClick={() => router.push("/teams")}
-				>
-					<Users className="mr-2 h-5 w-5" />
-					{t("home.teams")}
-				</Button>
 
 				{hasActiveGame && (
 					<Button

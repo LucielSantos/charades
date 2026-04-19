@@ -1,8 +1,19 @@
 import type { Metadata, Viewport } from "next"
+import { Geist, Geist_Mono } from "next/font/google"
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
 import { Toaster } from "@/components/ui/sonner"
 import "./globals.css"
+
+const geist = Geist({
+	subsets: ["latin"],
+	variable: "--font-sans",
+})
+
+const geistMono = Geist_Mono({
+	subsets: ["latin"],
+	variable: "--font-geist-mono",
+})
 
 export const viewport: Viewport = {
 	themeColor: "#4f46e5",
@@ -29,7 +40,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 	const messages = await getMessages()
 
 	return (
-		<html lang={locale}>
+		<html lang={locale} className={`${geist.variable} ${geistMono.variable}`}>
 			<body className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-violet-100 antialiased">
 				<NextIntlClientProvider messages={messages}>
 					<main className="mx-auto max-w-[430px] min-h-screen">{children}</main>

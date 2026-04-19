@@ -3,7 +3,7 @@
 import { ArrowLeft, Settings } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CategoryGrid } from "@/components/game/category-grid"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
@@ -22,6 +22,9 @@ export default function GameTurnPage() {
 	const getTeamById = useTeamStore((s) => s.getTeamById)
 
 	const [settingsOpen, setSettingsOpen] = useState(false)
+	const [hydrated, setHydrated] = useState(false)
+
+	useEffect(() => setHydrated(true), [])
 
 	const teamId = getCurrentTeamId()
 	const team = getTeamById(teamId)
@@ -31,10 +34,12 @@ export default function GameTurnPage() {
 		router.push("/game/play")
 	}
 
-	if (!team) {
-		router.push("/")
-		return null
-	}
+	// biome-ignore lint/correctness/useExhaustiveDependencies: only redirect on initial hydration
+	useEffect(() => {
+		if (hydrated && !team) router.push("/")
+	}, [hydrated])
+
+	if (!hydrated || !team) return null
 
 	return (
 		<div

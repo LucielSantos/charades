@@ -24,15 +24,17 @@ export function TeamForm({ open, onClose, team }: TeamFormProps) {
 	const usedColors = getUsedColors()
 
 	useEffect(() => {
+		if (!open) return
 		if (team) {
 			setName(team.name)
 			setColor(team.color)
 		} else {
 			setName("")
-			const firstAvailable = teamColors.find((c) => !usedColors.includes(c.hex))
+			const used = getUsedColors()
+			const firstAvailable = teamColors.find((c) => !used.includes(c.hex))
 			setColor(firstAvailable?.hex ?? teamColors[0].hex)
 		}
-	}, [team, usedColors])
+	}, [open, team, getUsedColors])
 
 	function handleSave() {
 		if (!name.trim()) return

@@ -28,11 +28,24 @@
       "Bash(npx @biomejs/biome check src/ --max-diagnostics=50)",
       "Bash(grep -E \"^src/|^src\\\\\\\\\\\\\\\\|lint/|format/\")",
       "Bash(pnpm dev:*)",
-      "mcp__plugin_context-mode_context-mode__ctx_stats"
+      "mcp__plugin_context-mode_context-mode__ctx_stats",
+      "Bash(curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh)",
+      "Bash(sh)",
+      "Bash(rtk init *)",
+      "Bash(rtk gain *)",
+      "Bash(rtk ls *)",
+      "Bash(rtk read *)",
+      "Bash(rtk find *)",
+      "Bash(rtk lint *)",
+      "Bash(rtk tsc *)",
+      "Bash(rtk wc *)",
+      "Bash(rtk grep *)",
+      "Bash(yarn test *)",
+      "Bash(yarn lint *)",
+      "Bash(yarn build *)"
     ]
   },
   "enabledPlugins": {
-    "ui-ux-pro-max@ui-ux-pro-max-skill": true,
-    "context-mode@context-mode": true
+    "ui-ux-pro-max@ui-ux-pro-max-skill": true
   }
 }

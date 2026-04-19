@@ -1,13 +1,22 @@
 "use client"
 
-import { ArrowLeft, Play } from "lucide-react"
+import { ArrowLeft, Pencil, Play, Plus, Trash2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 import { CategoryGrid } from "@/components/game/category-grid"
+import { TeamForm } from "@/components/teams/team-form"
 import { Button } from "@/components/ui/button"
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog"
 import { allCategoryIds } from "@/data/categories"
-import type { CategoryId, Difficulty, TimerMode } from "@/data/types"
+import type { CategoryId, Difficulty, Team, TimerMode } from "@/data/types"
 import { useGameStore } from "@/stores/game-store"
 import { useTeamStore } from "@/stores/team-store"
 
@@ -15,9 +24,11 @@ const TIMER_OPTIONS = [30, 60, 90]
 
 export default function GameSetupPage() {
 	const t = useTranslations("setup")
-	const _tc = useTranslations("common")
+	const tt = useTranslations("teams")
+	const tc = useTranslations("common")
 	const router = useRouter()
 	const teams = useTeamStore((s) => s.teams)
+	const removeTeam = useTeamStore((s) => s.removeTeam)
 	const startGame = useGameStore((s) => s.startGame)
 
 	const [selectedTeamIds, setSelectedTeamIds] = useState<string[]>([])
@@ -26,8 +37,35 @@ export default function GameSetupPage() {
 	const [timerMode, setTimerMode] = useState<TimerMode>("countdown")
 	const [timerSeconds, setTimerSeconds] = useState(60)
 
+	const [formOpen, setFormOpen] = useState(false)
+	const [editingTeam, setEditingTeam] = useState<Team | null>(null)
+	const [deleteId, setDeleteId] = useState<string | null>(null)
+
 	function toggleTeam(id: string) {
 		setSelectedTeamIds((prev) => (prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]))
+	}
+
+	function handleAddTeam() {
+		setEditingTeam(null)
+		setFormOpen(true)
+	}
+
+	function handleEditTeam(team: Team) {
+		setEditingTeam(team)
+		setFormOpen(true)
+	}
+
+	function handleCloseForm() {
+		setFormOpen(false)
+		setEditingTeam(null)
+	}
+
+	function confirmDelete() {
+		if (deleteId) {
+			removeTeam(deleteId)
+			setSelectedTeamIds((prev) => prev.filter((id) => id !== deleteId))
+			setDeleteId(null)
+		}
 	}
 
 	function handleStart() {
@@ -56,33 +94,76 @@ export default function GameSetupPage() {
 
 			{/* Teams */}
 			<section className="mb-8">
-				<h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-					{t("selectTeams")}
-				</h2>
-				<div className="flex flex-wrap gap-2">
-					{teams.map((team) => {
-						const isSelected = selectedTeamIds.includes(team.id)
-						return (
-							<button
-								key={team.id}
-								type="button"
-								onClick={() => toggleTeam(team.id)}
-								className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-all ${
-									isSelected
-										? "text-white shadow-md"
-										: "bg-white text-gray-600 border border-gray-200"
-								}`}
-								style={isSelected ? { backgroundColor: team.color } : undefined}
-							>
-								{!isSelected && (
-									<div className="h-3 w-3 rounded-full" style={{ backgroundColor: team.color }} />
-								)}
-								{team.name}
-							</button>
-						)
-					})}
+				<div className="flex items-center justify-between mb-3">
+					<h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+						{t("selectTeams")}
+					</h2>
+					<Button
+						size="icon"
+						className="h-8 w-8 bg-indigo-600 hover:bg-indigo-700"
+						onClick={handleAddTeam}
+					>
+						<Plus className="h-4 w-4" />
+					</Button>
 				</div>
-				{selectedTeamIds.length < 2 && <p className="text-xs text-red-500 mt-2">{t("minTeams")}</p>}
+				{teams.length === 0 ? (
+					<div className="rounded-xl border border-dashed border-gray-300 bg-white p-6 text-center">
+						<p className="text-sm text-gray-500">{tt("noTeams")}</p>
+						<p className="text-xs text-gray-400 mt-1">{tt("minTeams")}</p>
+					</div>
+				) : (
+					<div className="space-y-2">
+						{teams.map((team) => {
+							const isSelected = selectedTeamIds.includes(team.id)
+							return (
+								<div
+									key={team.id}
+									className={`flex items-center gap-3 rounded-xl p-3 shadow-sm transition-all ${
+										isSelected ? "text-white" : "bg-white"
+									}`}
+									style={isSelected ? { backgroundColor: team.color } : undefined}
+								>
+									<button
+										type="button"
+										onClick={() => toggleTeam(team.id)}
+										className="flex flex-1 items-center gap-3 text-left"
+									>
+										<div
+											className={`h-5 w-5 rounded-full shrink-0 ${isSelected ? "ring-2 ring-white" : ""}`}
+											style={{ backgroundColor: team.color }}
+										/>
+										<span
+											className={`flex-1 font-semibold truncate ${
+												isSelected ? "text-white" : "text-gray-800"
+											}`}
+										>
+											{team.name}
+										</span>
+									</button>
+									<Button
+										variant="ghost"
+										size="icon"
+										className={`h-8 w-8 ${isSelected ? "hover:bg-white/20" : ""}`}
+										onClick={() => handleEditTeam(team)}
+									>
+										<Pencil className={`h-4 w-4 ${isSelected ? "text-white" : "text-gray-500"}`} />
+									</Button>
+									<Button
+										variant="ghost"
+										size="icon"
+										className={`h-8 w-8 ${isSelected ? "hover:bg-white/20" : ""}`}
+										onClick={() => setDeleteId(team.id)}
+									>
+										<Trash2 className={`h-4 w-4 ${isSelected ? "text-white" : "text-red-500"}`} />
+									</Button>
+								</div>
+							)
+						})}
+					</div>
+				)}
+				{teams.length > 0 && selectedTeamIds.length < 2 && (
+					<p className="text-xs text-red-500 mt-2">{t("minTeams")}</p>
+				)}
 			</section>
 
 			{/* Categories */}
@@ -171,6 +252,25 @@ export default function GameSetupPage() {
 					</Button>
 				</div>
 			</div>
+
+			<TeamForm open={formOpen} onClose={handleCloseForm} team={editingTeam} />
+
+			<Dialog open={!!deleteId} onOpenChange={(o) => !o && setDeleteId(null)}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>{tt("delete")}</DialogTitle>
+						<DialogDescription>{tt("deleteConfirm")}</DialogDescription>
+					</DialogHeader>
+					<DialogFooter>
+						<Button variant="outline" onClick={() => setDeleteId(null)}>
+							{tc("cancel")}
+						</Button>
+						<Button variant="destructive" onClick={confirmDelete}>
+							{tt("delete")}
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
 		</div>
 	)
 }

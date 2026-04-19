@@ -62,7 +62,18 @@
 		"correct": "Acertou",
 		"hideWord": "Esconder palavra",
 		"showWord": "Mostrar palavra",
-		"start": "Iniciar"
+		"start": "Iniciar",
+		"menu": "Menu",
+		"configure": "Configurar",
+		"exit": "Sair",
+		"exitHome": "Voltar para home",
+		"endGame": "Encerrar jogo",
+		"endGameConfirm": "Tem certeza? O placar sera apagado.",
+		"close": "Fechar",
+		"categories": "Categorias",
+		"difficulty": "Dificuldade",
+		"timer": "Cronometro",
+		"timerNote": "A mudanca de cronometro vale a partir da proxima rodada"
 	},
 	"result": {
 		"correct": "Acertou!",

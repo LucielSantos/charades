@@ -127,6 +127,12 @@
 	html {
 		@apply font-sans;
 	}
+
+	@media (min-width: 768px) {
+		main > .min-h-screen {
+			min-height: 100%;
+		}
+	}
 }
 
 @keyframes bounce-in {

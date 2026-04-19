@@ -42,10 +42,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
 	return (
 		<html lang={locale} className={`${geist.variable} ${geistMono.variable}`}>
-			<body className="min-h-screen bg-background antialiased">
+			<body className="min-h-screen bg-background antialiased md:h-screen md:min-h-0 md:overflow-hidden">
 				<NextIntlClientProvider messages={messages}>
 					<DesktopStage>
-						<main className="mx-auto max-w-[430px] min-h-screen md:rounded-3xl md:shadow-2xl md:my-8 md:min-h-[calc(100vh-4rem)] md:bg-white/80 md:backdrop-blur-sm md:border md:border-white/40 md:overflow-hidden dark:md:bg-zinc-900/70 dark:md:border-zinc-800/60">
+						<main className="mx-auto max-w-[430px] min-h-screen md:rounded-3xl md:shadow-2xl md:my-8 md:h-[calc(100vh-4rem)] md:min-h-0 md:bg-white/80 md:backdrop-blur-sm md:border md:border-white/40 md:overflow-hidden dark:md:bg-zinc-900/70 dark:md:border-zinc-800/60">
 							{children}
 						</main>
 					</DesktopStage>

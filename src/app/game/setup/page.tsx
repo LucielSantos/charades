@@ -84,14 +84,15 @@ export default function GameSetupPage() {
 	const canStart = selectedTeamIds.length >= 2 && selectedCategories.length >= 1
 
 	return (
-		<div className="flex flex-col min-h-screen px-6 py-8 pb-24">
-			<div className="flex items-center gap-3 mb-6">
+		<div className="flex flex-col h-dvh md:h-full px-6 py-8">
+			<div className="flex items-center gap-3 mb-6 shrink-0">
 				<Button variant="ghost" size="icon" onClick={() => router.push("/")}>
 					<ArrowLeft className="h-5 w-5" />
 				</Button>
 				<h1 className="text-2xl font-bold text-gray-900">{t("title")}</h1>
 			</div>
 
+			<div className="flex-1 min-h-0 overflow-y-auto -mx-6 px-6">
 			{/* Teams */}
 			<section className="mb-8">
 				<div className="flex items-center justify-between mb-3">
@@ -198,7 +199,7 @@ export default function GameSetupPage() {
 			</section>
 
 			{/* Timer */}
-			<section className="mb-8">
+			<section>
 				<h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
 					{t("timer")}
 				</h2>
@@ -237,20 +238,19 @@ export default function GameSetupPage() {
 					</div>
 				)}
 			</section>
+			</div>
 
 			{/* Start Button */}
-			<div className="sticky bottom-0 p-4 bg-gradient-to-t from-white/80 to-transparent">
-				<div className="mx-auto max-w-[430px]">
-					<Button
-						size="lg"
-						className="w-full h-14 text-lg font-bold bg-indigo-600 hover:bg-indigo-700"
-						disabled={!canStart}
-						onClick={handleStart}
-					>
-						<Play className="mr-2 h-5 w-5" />
-						{t("startGame")}
-					</Button>
-				</div>
+			<div className="shrink-0 pt-4">
+				<Button
+					size="lg"
+					className="w-full h-14 text-lg font-bold bg-indigo-600 hover:bg-indigo-700"
+					disabled={!canStart}
+					onClick={handleStart}
+				>
+					<Play className="mr-2 h-5 w-5" />
+					{t("startGame")}
+				</Button>
 			</div>
 
 			<TeamForm open={formOpen} onClose={handleCloseForm} team={editingTeam} />

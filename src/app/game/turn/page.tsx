@@ -87,7 +87,7 @@ export default function GameTurnPage() {
 			</Button>
 
 			<Sheet open={settingsOpen} onOpenChange={setSettingsOpen}>
-				<SheetContent side="bottom" className="rounded-t-2xl">
+				<SheetContent side="bottom" className="rounded-t-2xl md:rounded-2xl">
 					<SheetHeader>
 						<SheetTitle>{t("editCategories")}</SheetTitle>
 					</SheetHeader>

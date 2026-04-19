@@ -50,7 +50,10 @@ export function PlayMenuSheet({
 	return (
 		<>
 			<Sheet open={open} onOpenChange={onOpenChange}>
-				<SheetContent side="bottom" className="rounded-t-2xl max-h-[90vh] overflow-y-auto">
+				<SheetContent
+					side="bottom"
+					className="rounded-t-2xl max-h-[90vh] overflow-y-auto md:rounded-2xl"
+				>
 					<SheetHeader>
 						<SheetTitle>{t("menu")}</SheetTitle>
 					</SheetHeader>

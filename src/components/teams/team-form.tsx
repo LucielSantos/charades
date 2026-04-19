@@ -48,7 +48,7 @@ export function TeamForm({ open, onClose, team }: TeamFormProps) {
 
 	return (
 		<Sheet open={open} onOpenChange={(o) => !o && onClose()}>
-			<SheetContent side="bottom" className="rounded-t-2xl">
+			<SheetContent side="bottom" className="rounded-t-2xl md:rounded-2xl">
 				<SheetHeader>
 					<SheetTitle>{team ? t("editTeam") : t("addTeam")}</SheetTitle>
 				</SheetHeader>

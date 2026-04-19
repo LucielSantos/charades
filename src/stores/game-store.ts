@@ -161,7 +161,6 @@ export const useGameStore = create<GameStore>()(
 				const state = get()
 				const nextSettings: GameSettings = { ...state.settings, ...partial }
 
-				// Protege contra zero categorias
 				if (nextSettings.selectedCategories.length === 0) return
 
 				const categoriesChanged =
@@ -187,7 +186,6 @@ export const useGameStore = create<GameStore>()(
 					return
 				}
 
-				// Palavra atual não encaixa mais — sorteia uma nova, sem contar como skipped.
 				const usedWithoutCurrent = word
 					? state.usedWordIds.filter((id) => id !== word.id)
 					: state.usedWordIds
@@ -209,8 +207,6 @@ export const useGameStore = create<GameStore>()(
 				}
 
 				if (available.length === 0) {
-					// Nenhuma palavra possível nos novos filtros — aplica settings mesmo assim
-					// e limpa currentWord para forçar redirect.
 					set({
 						settings: nextSettings,
 						currentWord: null,

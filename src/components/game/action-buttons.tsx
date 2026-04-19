@@ -1,15 +1,16 @@
 "use client"
 
-import { ArrowRight, Check, X } from "lucide-react"
+import { Check, RotateCw, X } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import type { PlayResult } from "@/data/types"
 
 interface ActionButtonsProps {
 	onAction: (result: PlayResult) => void
+	onRegenerate: () => void
 }
 
-export function ActionButtons({ onAction }: ActionButtonsProps) {
+export function ActionButtons({ onAction, onRegenerate }: ActionButtonsProps) {
 	const t = useTranslations("play")
 
 	return (
@@ -17,10 +18,10 @@ export function ActionButtons({ onAction }: ActionButtonsProps) {
 			<Button
 				size="lg"
 				className="flex-1 h-14 bg-yellow-500 hover:bg-yellow-600 text-white font-bold"
-				onClick={() => onAction("skipped")}
+				onClick={onRegenerate}
 			>
-				<ArrowRight className="mr-1 h-5 w-5" />
-				{t("skip")}
+				<RotateCw className="mr-1 h-5 w-5" />
+				{t("regenerate")}
 			</Button>
 			<Button
 				size="lg"

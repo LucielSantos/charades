@@ -24,11 +24,15 @@ export default function GamePlayPage() {
 	const getCurrentTeamId = useGameStore((s) => s.getCurrentTeamId)
 	const getRoundNumber = useGameStore((s) => s.getRoundNumber)
 	const submitResult = useGameStore((s) => s.submitResult)
+	const regenerateWord = useGameStore((s) => s.regenerateWord)
 	const poolWasReset = useGameStore((s) => s.poolWasReset)
 	const clearPoolResetFlag = useGameStore((s) => s.clearPoolResetFlag)
 	const getTeamById = useTeamStore((s) => s.getTeamById)
 
 	const [muted, setMuted] = useState(false)
+	const [hydrated, setHydrated] = useState(false)
+
+	useEffect(() => setHydrated(true), [])
 
 	const team = getTeamById(getCurrentTeamId())
 	const roundNumber = getRoundNumber()
@@ -62,10 +66,16 @@ export default function GamePlayPage() {
 		router.push("/game/result")
 	}
 
-	if (!currentWord || !team) {
-		router.push("/game/turn")
-		return null
+	function handleRegenerate() {
+		regenerateWord()
 	}
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: only redirect on initial hydration
+	useEffect(() => {
+		if (hydrated && (!currentWord || !team)) router.push("/game/turn")
+	}, [hydrated])
+
+	if (!hydrated || !currentWord || !team) return null
 
 	return (
 		<div className="flex flex-col min-h-screen px-6 py-8 relative">
@@ -114,7 +124,7 @@ export default function GamePlayPage() {
 
 			{/* Actions */}
 			<div className="relative z-20 pb-4">
-				<ActionButtons onAction={handleAction} />
+				<ActionButtons onAction={handleAction} onRegenerate={handleRegenerate} />
 			</div>
 		</div>
 	)

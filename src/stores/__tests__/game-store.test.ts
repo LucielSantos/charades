@@ -67,14 +67,6 @@ describe("useGameStore", () => {
 			expect(stats.wrong).toBe(1)
 		})
 
-		it("records skipped for current team", () => {
-			useGameStore.getState().startGame(defaultSettings)
-			useGameStore.getState().drawWord()
-			useGameStore.getState().submitResult("skipped")
-			const stats = useGameStore.getState().teamStats["team-1"]
-			expect(stats.skipped).toBe(1)
-		})
-
 		it("advances to next team after submit", () => {
 			useGameStore.getState().startGame(defaultSettings)
 			useGameStore.getState().drawWord()

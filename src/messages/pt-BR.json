@@ -57,7 +57,7 @@
 	"play": {
 		"round": "Rodada {round}",
 		"timeUp": "Tempo!",
-		"skip": "Pular",
+		"regenerate": "Trocar",
 		"wrong": "Errou",
 		"correct": "Acertou",
 		"hideWord": "Esconder palavra",
@@ -66,9 +66,7 @@
 	"result": {
 		"correct": "Acertou!",
 		"wrong": "Errou!",
-		"skipped": "Pulou",
-		"next": "Proximo: Time {team}",
-		"score": "Placar"
+		"next": "Proximo: Time {team}"
 	},
 	"ranking": {
 		"title": "Ranking",
@@ -76,7 +74,7 @@
 		"team": "Time",
 		"correct": "Acertos",
 		"wrong": "Erros",
-		"skipped": "Puladas",
+		"skipped": "Trocadas",
 		"accuracy": "Taxa",
 		"points": "Pontos",
 		"endGame": "Encerrar Jogo",

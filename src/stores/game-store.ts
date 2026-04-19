@@ -6,6 +6,7 @@ import { words as allWords } from "@/data/words"
 interface GameStore extends GameState {
 	startGame: (settings: GameSettings) => void
 	drawWord: () => void
+	regenerateWord: () => void
 	submitResult: (result: PlayResult) => void
 	updateCategories: (categories: CategoryId[]) => void
 	resetGame: () => void
@@ -97,6 +98,45 @@ export const useGameStore = create<GameStore>()(
 				}))
 			},
 
+			regenerateWord: () => {
+				const { settings, usedWordIds, currentWord, currentTeamIndex, teamStats } = get()
+				if (!currentWord) return
+
+				const teamId = settings.selectedTeamIds[currentTeamIndex]
+				const currentStats = teamStats[teamId]
+
+				const usedWithoutCurrent = usedWordIds.filter((id) => id !== currentWord.id)
+
+				let available = getAvailableWords(
+					settings.selectedCategories,
+					settings.difficulty,
+					usedWithoutCurrent,
+				).filter((w) => w.id !== currentWord.id)
+
+				let resetPool = false
+				if (available.length === 0) {
+					available = getAvailableWords(settings.selectedCategories, settings.difficulty, []).filter(
+						(w) => w.id !== currentWord.id,
+					)
+					resetPool = true
+				}
+
+				if (available.length === 0) return
+
+				const newWord = pickRandomWord(available)
+				const nextUsed = resetPool ? [newWord.id] : [...usedWithoutCurrent, newWord.id]
+
+				set({
+					currentWord: newWord,
+					usedWordIds: nextUsed,
+					teamStats: {
+						...teamStats,
+						[teamId]: { ...currentStats, skipped: currentStats.skipped + 1 },
+					},
+					poolWasReset: resetPool,
+				})
+			},
+
 			submitResult: (result) => {
 				const { settings, currentTeamIndex, currentWord, teamStats } = get()
 				const teamId = settings.selectedTeamIds[currentTeamIndex]
@@ -105,7 +145,6 @@ export const useGameStore = create<GameStore>()(
 				const updatedStats = { ...currentStats }
 				if (result === "correct") updatedStats.correct += 1
 				else if (result === "wrong") updatedStats.wrong += 1
-				else if (result === "skipped") updatedStats.skipped += 1
 
 				const nextIndex = (currentTeamIndex + 1) % settings.selectedTeamIds.length
 

@@ -4,7 +4,7 @@ export type Difficulty = "easy" | "medium" | "hard"
 
 export type TimerMode = "countdown" | "unlimited"
 
-export type PlayResult = "correct" | "wrong" | "skipped"
+export type PlayResult = "correct" | "wrong"
 
 export type GameStatus = "idle" | "setup" | "playing" | "paused"
 

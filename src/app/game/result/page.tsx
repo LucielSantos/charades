@@ -1,10 +1,11 @@
 "use client"
 
-import { ArrowRight, Check, X } from "lucide-react"
+import { Check, X } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
+import { useEffect, useState } from "react"
 import { Confetti } from "@/components/game/confetti"
-import { Scoreboard } from "@/components/game/scoreboard"
+import { RankingTable } from "@/components/game/ranking-table"
 import { Button } from "@/components/ui/button"
 import type { PlayResult } from "@/data/types"
 import { useGameStore } from "@/stores/game-store"
@@ -28,11 +29,6 @@ const resultConfig: Record<
 		icon: X,
 		labelKey: "result.wrong",
 	},
-	skipped: {
-		gradient: "from-yellow-400 to-amber-500",
-		icon: ArrowRight,
-		labelKey: "result.skipped",
-	},
 }
 
 export default function GameResultPage() {
@@ -46,12 +42,18 @@ export default function GameResultPage() {
 	const getTeamById = useTeamStore((s) => s.getTeamById)
 	const teams = useTeamStore((s) => s.teams)
 
+	const [hydrated, setHydrated] = useState(false)
+
+	useEffect(() => setHydrated(true), [])
+
 	const nextTeam = getTeamById(getCurrentTeamId())
 
-	if (!lastResult || !lastWord) {
-		router.push("/game/turn")
-		return null
-	}
+	// biome-ignore lint/correctness/useExhaustiveDependencies: only redirect on initial hydration
+	useEffect(() => {
+		if (hydrated && (!lastResult || !lastWord)) router.push("/game/turn")
+	}, [hydrated])
+
+	if (!hydrated || !lastResult || !lastWord) return null
 
 	const config = resultConfig[lastResult]
 	const Icon = config.icon
@@ -74,10 +76,7 @@ export default function GameResultPage() {
 			<p className="text-xl text-white/80 font-semibold mb-8">{lastWord.text}</p>
 
 			<div className="w-full bg-white/20 rounded-2xl p-4 backdrop-blur-sm mb-8">
-				<h2 className="text-sm font-semibold text-white/70 uppercase tracking-wide mb-3 text-center">
-					{t("result.score")}
-				</h2>
-				<Scoreboard teams={gameTeams} stats={teamStats} compact />
+				<RankingTable teams={gameTeams} stats={teamStats} />
 			</div>
 
 			<Button

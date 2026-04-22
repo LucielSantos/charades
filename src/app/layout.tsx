@@ -1,10 +1,12 @@
 import DesktopStage from "@/components/layout/desktop-stage"
 import { Toaster } from "@/components/ui/sonner"
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata, Viewport } from "next"
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
 import { Geist, Geist_Mono } from "next/font/google"
+
 
 import "./globals.css"
 
@@ -53,6 +55,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 					</DesktopStage>
 					<Toaster />
 					<Analytics />
+					<SpeedInsights />
 				</NextIntlClientProvider>
 			</body>
 		</html>

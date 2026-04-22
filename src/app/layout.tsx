@@ -1,9 +1,11 @@
-import type { Metadata, Viewport } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
-import { NextIntlClientProvider } from "next-intl"
-import { getLocale, getMessages } from "next-intl/server"
 import DesktopStage from "@/components/layout/desktop-stage"
 import { Toaster } from "@/components/ui/sonner"
+import { Analytics } from "@vercel/analytics/next"
+import type { Metadata, Viewport } from "next"
+import { NextIntlClientProvider } from "next-intl"
+import { getLocale, getMessages } from "next-intl/server"
+import { Geist, Geist_Mono } from "next/font/google"
+
 import "./globals.css"
 
 const geist = Geist({
@@ -50,6 +52,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 						</main>
 					</DesktopStage>
 					<Toaster />
+					<Analytics />
 				</NextIntlClientProvider>
 			</body>
 		</html>
